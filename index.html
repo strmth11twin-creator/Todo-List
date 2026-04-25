@@ -1,12 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.webp" type="image/webp">
     <link rel="stylesheet" href="style.css">
     <title>Todo-List</title>
 </head>
+
 <body>
-    
+    <div class="container">
+        <h1 class="title">Мой Список Задач</h1>
+        <div class="container_input">
+            <input type="text" class="input" placeholder="Добавить новую задачу..." data-input>
+            <button class="btn" data-btn>Добавить</button>
+        </div>
+        <div class="todo_wrapper">
+            <nav class="todo_wrapper--navigation">
+                <ul class="navigation_list">
+                    <li class="navigation_list--item">
+                        <button class="navigation_list--link active" type="button">Все</button>
+                    </li>
+                    <li class="navigation_list--item">
+                        <button class="navigation_list--link" type="button">Активные</button>
+                    </li>
+                    <li class="navigation_list--item">
+                        <button class="navigation_list--link" type="button">Выполненные</button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="container-todos"></div>
+    </div>
 </body>
+
 </html>
