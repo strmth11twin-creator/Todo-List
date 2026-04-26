@@ -7,9 +7,43 @@ const todoTemplate = document.querySelector("[data-todo-template]");
 const countAll = document.querySelector("[data-count-all]");
 const countActive = document.querySelector("[data-count-active]");
 const countCompleted = document.querySelector("[data-count-completed]");
+const removeCompletedBtn = document.querySelector("[data-remove-completed]");
+const selectAllBtn = document.querySelector("[data-select-all]");
+const searchInput = document.querySelector("[data-search-input]");
 
 let todoList = JSON.parse(localStorage.getItem("todos")) || [];
+let filterList = [];
 let currentFilter = "all";
+
+searchInput.addEventListener("input", (e) => {
+    const searchValue = searchInput.value.trim();
+
+    renderAndRenderFilteredTodos(searchValue);
+})
+
+function renderAndRenderFilteredTodos(searchValue) {
+    filterList = todoList.filter(t => t.text.toLowerCase().includes(searchValue.toLowerCase()));
+
+    renderFiltered();
+}
+
+selectAllBtn.addEventListener("click", (e) => {
+    let check = todoList.some(t => !t.completed);
+
+    if (check) {
+        todoList = todoList.map(t => {
+            return { ...t, completed: true }
+        })
+    } else {
+        todoList = todoList.map(t => {
+            return { ...t, completed: false }
+        })
+    }
+
+    saveToLocalStorage(todoList);
+    render();
+    updateCounters();
+})
 
 navContainer.addEventListener("click", (e) => {
     if (e.target.classList.contains("navigation_list--link")) {
@@ -19,8 +53,20 @@ navContainer.addEventListener("click", (e) => {
 
         currentFilter = e.target.dataset.filter;
 
-        render();
+        if (searchInput.value.trim()) {
+            renderAndRenderFilteredTodos(searchInput.value.trim());
+        } else {
+            render();
+        }
     }
+})
+
+removeCompletedBtn.addEventListener("click", (e) => {
+    todoList = todoList.filter(t => !t.completed);
+
+    saveToLocalStorage(todoList);
+    render();
+    updateCounters();
 })
 
 function saveToLocalStorage(list) {
@@ -28,13 +74,13 @@ function saveToLocalStorage(list) {
 }
 
 input.addEventListener("keydown", (e) => {
-    if(e.key === "Enter") {
+    if (e.key === "Enter") {
         btn.click();
     }
 })
 
 btn.addEventListener("click", () => {
-    if(input.value.trim()) {
+    if (input.value.trim()) {
         const newTodo = {
             id: Date.now(),
             text: input.value,
@@ -63,20 +109,30 @@ function createdTodoLoyaut(todo) {
 
     checkbox.addEventListener("change", (e) => {
         todoList = todoList.map(t => {
-            if(t.id === todo.id) {
-               return {...t, completed: e.target.checked}
+            if (t.id === todo.id) {
+                return { ...t, completed: e.target.checked }
             }
             return t
         })
+
         saveToLocalStorage(todoList);
-        render();
+        if (searchInput.value.trim()) {
+            renderAndRenderFilteredTodos(searchInput.value.trim())
+        } else {
+            render();
+        }
         updateCounters();
     })
 
     removeBtn.addEventListener("click", (e) => {
         todoList = todoList.filter(t => t.id !== todo.id);
+
         saveToLocalStorage(todoList);
-        render();
+        if (searchInput.value.trim()) {
+            renderAndRenderFilteredTodos(searchInput.value.trim())
+        } else {
+            render();
+        }
         updateCounters();
     })
 
@@ -93,21 +149,45 @@ function updateCounters() {
     countCompleted.textContent = completed;
 }
 
+function renderFiltered() {
+    container.innerHTML = "";
+
+    let filteredTodos = filterList;
+
+    if (filterList.length === 0) {
+        return container.innerHTML = "<h3>No found todos...</h3>"
+    }
+
+    if (currentFilter === "active") {
+        filteredTodos = filterList.filter(t => !t.completed)
+    }
+
+    if (currentFilter === "completed") {
+        filteredTodos = filterList.filter(t => t.completed)
+    }
+
+    filteredTodos.forEach(todo => {
+        const todoElement = createdTodoLoyaut(todo);
+
+        container.append(todoElement);
+    })
+}
+
 function render() {
     container.innerHTML = "";
 
     let filteredTodos = todoList;
 
-    if(currentFilter === "active") {
+    if (currentFilter === "active") {
         filteredTodos = todoList.filter(t => !t.completed)
     }
 
-    if(currentFilter === "completed") {
+    if (currentFilter === "completed") {
         filteredTodos = todoList.filter(t => t.completed)
     }
-    
-    if(filteredTodos.length === 0) {
-        return container.innerHTML = "<h3>no todos...</h3>"
+
+    if (filteredTodos.length === 0) {
+        return container.innerHTML = "<h3>No todos...</h3>"
     }
 
     filteredTodos.forEach(todo => {

@@ -13,34 +13,49 @@
 <body>
     <div class="container">
         <h1 class="title">Мой Список Задач</h1>
+
+        <div class="container_wrapper-content">
+            <button class="remove-completed" data-remove-completed>Удалить Выполненное</button>
+            <button class="select-all" data-select-all>Отметить все</button>
+        </div>
+
         <div class="container_input">
             <input type="text" class="input" placeholder="Добавить новую задачу..." data-input>
             <button class="btn" data-btn>Добавить</button>
         </div>
+
+        <input type="text" class="search-input" data-search-input placeholder="Найти задачу...">
+
         <div class="todo_wrapper" data-todo-wrapper>
             <nav class="todo_wrapper--navigation">
                 <ul class="navigation_list">
                     <li class="navigation_list--item">
-                        <button class="navigation_list--link active" type="button" data-filter="all">Все <span data-count-all>0</span></button>
+                        <button class="navigation_list--link active" type="button" data-filter="all">Все <span
+                                data-count-all>0</span></button>
                     </li>
                     <li class="navigation_list--item">
-                        <button class="navigation_list--link" type="button" data-filter="active">Активные <span data-count-active>0</span></button>
+                        <button class="navigation_list--link" type="button" data-filter="active">Активные <span
+                                data-count-active>0</span></button>
                     </li>
                     <li class="navigation_list--item">
-                        <button class="navigation_list--link" type="button" data-filter="completed">Выполненные <span data-count-completed>0</span></button>
+                        <button class="navigation_list--link" type="button" data-filter="completed">Выполненные <span
+                                data-count-completed>0</span></button>
                     </li>
                 </ul>
             </nav>
         </div>
+
         <div class="container-todos" data-list-todos></div>
     </div>
 
     <template data-todo-template>
         <div class="todo">
             <input type="checkbox" class="todo-checkbox" data-todo-checkbox>
+
             <p class="todo-text" data-todo-text>text</p>
+
             <button class="remove-btn" data-remove-btn>🗑️</button>
-        </div> 
+        </div>
     </template>
 </body>
 

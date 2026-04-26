@@ -34,6 +34,26 @@ ul {
     width: 100%;
 }
 
+.container_wrapper-content {
+    height: 40px;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.remove-completed {
+    border-radius: 5px;
+    height: 100%;
+    border: none;
+    background-color: unset;
+    cursor: pointer;
+}
+
+.remove-completed:hover {
+    background-color: #f1f1f1;
+}
+
 .container_input {
     display: flex;
     gap: 10px;
@@ -42,12 +62,14 @@ ul {
 
 .title {}
 
-.input {
+.input,
+.search-input {
     padding: 0 10px;
     border-radius: 4px;
     border: 1px solid #c5c1c1;
     height: 40px;
     width: 100%;
+    font-size: 16px;
 }
 
 .btn {
@@ -66,8 +88,7 @@ ul {
     border-bottom: 1px solid #d8d5d5;
 }
 
-.todo_wrapper--navigation {
-}
+.todo_wrapper--navigation {}
 
 .navigation_list {
     display: flex;
@@ -136,7 +157,7 @@ ul {
     }
 }
 
-.todo-checkbox:checked ~ .todo-text {
+.todo-checkbox:checked~.todo-text {
     color: #6d6b6b;
     text-decoration: line-through;
 }
