@@ -6,12 +6,12 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
-    margin: 0;
+    margin: 150px 0 0 0;
     background-color: #f1f1f1;
 }
 
-h1 {
+h1,
+p {
     margin: 0;
 }
 
@@ -88,6 +88,55 @@ ul {
 .active {
     color: #606ff1;
     background-color: #dcecf7;
+
 }
 
-.container-todos {}
+.container-todos {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+
+}
+
+.todo {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: start;
+    height: 50px;
+    border: 1px solid #cecccc;
+    padding: 0 15px;
+    border-radius: 5px;
+
+    .todo-checkbox {
+        width: 20px;
+        height: 20px;
+        border-radius: 10px;
+        cursor: pointer;
+        accent-color: #539240;
+    }
+
+    .todo-text {
+        flex: 1;
+        font-size: 18px;
+
+    }
+
+    .remove-btn {
+        background-color: unset;
+        border: none;
+        width: 25px;
+        height: 25px;
+        cursor: pointer;
+    }
+
+    .remove-btn:disabled {
+        cursor: not-allowed;
+    }
+}
+
+.todo-checkbox:checked ~ .todo-text {
+    color: #6d6b6b;
+    text-decoration: line-through;
+}
