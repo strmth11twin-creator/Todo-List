@@ -1,13 +1,41 @@
+:root {
+    --bg-main: #0F1221;
+    --bg-gradient-start: #0F1221;
+    --bg-gradient-end: #1A1F3A;
+    --text-main: #FFFFFF;
+    --text-secondary: #A9AFC3;
+    --text-muted: #6B708D;
+}
+
 * {
     box-sizing: border-box;
 }
 
 body {
+    background: linear-gradient(135deg, #0F1221, #1A1F3A);
+    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 150px 0 0 0;
     background-color: #f1f1f1;
+    font-family: 'Inter', sans-serif;
+}
+
+.title {
+    color: var(--text-main);
+    font-size: 25px;
+}
+
+.wrapper_content-todo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.image {
+    width: 25px;
+    height: 25px;
 }
 
 h1,
@@ -26,11 +54,11 @@ ul {
     flex-direction: column;
     gap: 15px;
     align-items: start;
-    box-shadow: 2px 2px 10px #b4b3b3;
+    box-shadow: 2px 2px 10px var(--bg-gradient-end);
     border-radius: 5px;
-    background-color: #fff;
+    background-color: var(--bg-gradient-start);
     padding: 20px;
-    max-width: 500px;
+    max-width: 700px;
     width: 100%;
 }
 
@@ -38,20 +66,39 @@ ul {
     height: 40px;
     display: flex;
     width: 100%;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: start;
+    gap: 10px;
+    align-items: start;
 }
 
 .remove-completed {
     border-radius: 5px;
-    height: 100%;
-    border: none;
-    background-color: unset;
+    height: 40px;
+    max-width: 200px;
+    width: 100%;
     cursor: pointer;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-muted);
 }
 
 .remove-completed:hover {
-    background-color: #f1f1f1;
+    color: var(--text-main);
+}
+
+.select-all {
+    max-width: 200px;
+    width: 100%;
+    border-radius: 5px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.03);
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-muted);
+}
+
+.select-all:hover {
+    color: var(--text-main);
 }
 
 .container_input {
@@ -60,16 +107,21 @@ ul {
     width: 100%;
 }
 
-.title {}
-
 .input,
 .search-input {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 5px;
     padding: 0 10px;
-    border-radius: 4px;
-    border: 1px solid #c5c1c1;
-    height: 40px;
+    height: 50px;
     width: 100%;
     font-size: 16px;
+    color: var(--text-main);
+}
+
+.input::placeholder,
+.search-input::placeholder {
+    color: var(--text-muted);
 }
 
 .btn {
@@ -78,23 +130,21 @@ ul {
     width: 100%;
     border-radius: 4px;
     border: none;
-    background-color: #606ff1;
+    background-color: #7C5CFF;
     color: #fff;
 }
 
 .todo_wrapper {
     width: 100%;
     height: 50px;
-    border-bottom: 1px solid #d8d5d5;
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
 }
-
-.todo_wrapper--navigation {}
 
 .navigation_list {
     display: flex;
 }
-
-.navigation_list--item {}
 
 .navigation_list--link {
     padding: 10px 20px 10px 20px;
@@ -104,11 +154,12 @@ ul {
     font-weight: 600;
     cursor: pointer;
     border-radius: 5px;
+    color: var(--text-secondary);
 }
 
 .active {
-    color: #606ff1;
-    background-color: #dcecf7;
+    color: var(--text-main);
+    background-color: #7C5CFF;
 
 }
 
@@ -117,10 +168,21 @@ ul {
     flex-direction: column;
     gap: 10px;
     width: 100%;
+    color: var(--text-main);
+}
 
+.container-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: start;
+    justify-content: start;
+    width: 100%;
 }
 
 .todo {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
     display: flex;
     gap: 10px;
     align-items: center;
@@ -128,14 +190,14 @@ ul {
     height: 50px;
     border: 1px solid #cecccc;
     padding: 0 15px;
-    border-radius: 5px;
+
 
     .todo-checkbox {
         width: 20px;
         height: 20px;
         border-radius: 10px;
         cursor: pointer;
-        accent-color: #539240;
+        accent-color: #7C5CFF;
     }
 
     .todo-text {
@@ -158,6 +220,5 @@ ul {
 }
 
 .todo-checkbox:checked~.todo-text {
-    color: #6d6b6b;
     text-decoration: line-through;
 }
