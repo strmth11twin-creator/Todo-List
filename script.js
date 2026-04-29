@@ -10,10 +10,12 @@ const countCompleted = document.querySelector("[data-count-completed]");
 const removeCompletedBtn = document.querySelector("[data-remove-completed]");
 const selectAllBtn = document.querySelector("[data-select-all]");
 const searchInput = document.querySelector("[data-search-input]");
+const deadLineInput = document.querySelector("[data-date-input]");
 
 let todoList = JSON.parse(localStorage.getItem("todos")) || [];
 let filterList = [];
 let currentFilter = "all";
+
 
 searchInput.addEventListener("input", (e) => {
     const searchValue = searchInput.value.trim();
@@ -84,8 +86,11 @@ btn.addEventListener("click", () => {
         const newTodo = {
             id: Date.now(),
             text: input.value,
+            createdAt: createdDateRepresentation(new Date()),
             completed: false,
+            deadLine: deadLineInput.value,
         }
+
         todoList.push(newTodo);
         input.value = "";
 
@@ -95,6 +100,14 @@ btn.addEventListener("click", () => {
     }
 })
 
+function createdDateRepresentation(newCreatedDate) {
+    return Intl.DateTimeFormat("uz-UZ", {
+        day: "numeric",
+        month: "numeric",
+        year: "numeric",
+    }).format(newCreatedDate)
+}
+
 function createdTodoLoyaut(todo) {
     const todoElement = document.importNode(todoTemplate.content, true);
 
@@ -103,6 +116,12 @@ function createdTodoLoyaut(todo) {
 
     const todoText = todoElement.querySelector("[data-todo-text]");
     todoText.textContent = todo.text;
+
+    const todoDate = todoElement.querySelector("[data-todo-date]");
+    todoDate.textContent = todo.createdAt;
+
+    const todoDeadLineDate = todoElement.querySelector("[data-todo-deadLine-date]");
+    todoDeadLineDate.textContent = todo.deadLine;
 
     const removeBtn = todoElement.querySelector("[data-remove-btn]");
     removeBtn.disabled = !todo.completed;
@@ -178,6 +197,7 @@ function render() {
 
     let filteredTodos = todoList;
 
+   
     if (currentFilter === "active") {
         filteredTodos = todoList.filter(t => !t.completed)
     }
@@ -190,7 +210,15 @@ function render() {
         return container.innerHTML = "<h3>No todos...</h3>"
     }
 
-    filteredTodos.forEach(todo => {
+    const sortedTodos = [...filteredTodos].sort((a, b) => {
+        const dateA = a.deadLine ? new Date(a.deadLine) : Infinity;
+        const dateB = b.deadLine ? new Date(b.deadLine) : Infinity;
+ 
+        return dateA - dateB;
+    })
+
+
+    sortedTodos.forEach(todo => {
         const todoElement = createdTodoLoyaut(todo);
 
         container.append(todoElement);
