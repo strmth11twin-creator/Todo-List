@@ -14,15 +14,23 @@
     <div class="container">
         <h1 class="title">Мой Список Задач</h1>
 
-
-
         <div class="container_input">
             <input type="text" class="input" placeholder="Добавить новую задачу..." data-input>
             <button class="btn" data-btn>Добавить</button>
         </div>
 
         <label for="deadLine-id" class="label-todo">Выбрать дату дедлайна</label>
-        <input type="date" class="date-input" id="deadLine-id" placeholder="Выберите дату дедлайна" data-date-input>
+
+        <div class="container_deadLine-input">
+            <input type="date" class="date-input" id="deadLine-id" placeholder="Выберите дату дедлайна" data-date-input>
+
+            <select class="deadLine_input--select" data-select>
+                <option value="" class="input_select--option" disabled selected>Выбрать приоритет</option>
+                <option value="Низкий 🟢" class="input_select--option">Низкий</option>
+                <option value="Средний 🟠" class="input_select--option">Средний</option>
+                <option value="Высокий 🔴" class="input_select--option">Высокий</option>
+            </select>
+        </div>
 
         <input type="text" class="search-input" data-search-input placeholder="Найти задачу...">
 
@@ -54,12 +62,15 @@
     </div>
 
     <template data-todo-template>
-        <div class="todo">
+        <div class="todo" data-id="">
             <input type="checkbox" class="todo-checkbox" data-todo-checkbox>
 
             <div class="todo-info">
                 <p class="todo-text" data-todo-text>text</p>
-                <span class="todo-date" data-todo-date>29.04.2026</span>
+                <div class="todo_info--dates">
+                    <span class="todo-date" data-todo-date>29.04.2026</span>
+                    <span class="todo-difficulties" data-todo-difficulties></span>
+                </div>
             </div>
 
             <span class="todo-deadLine-date" data-todo-deadLine-date></span>

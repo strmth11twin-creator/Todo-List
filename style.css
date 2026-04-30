@@ -123,8 +123,32 @@ ul {
     color: var(--text-main);
 }
 
-input[type="date"] {
-    color-scheme: light;
+.container_deadLine-input {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: start;
+    width: 100%;
+}
+
+
+.date-input {
+    max-width: 250px;
+}
+
+.deadLine_input--select {
+    height: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: #fff;
+    padding: 0 10px;
+}
+
+option {
+    color: #fff;
+    background-color: #1c1c1c;
 }
 
 .input::placeholder,
@@ -217,8 +241,23 @@ input[type="date"] {
     }
 
     .todo-text {
-        font-size: 18px;
+        cursor: pointer;
         word-break: break-all;
+    }
+
+    .todo_info--dates {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        justify-content: start;
+    }
+
+    .todo-date {
+        font-size: 14px;
+    }
+
+    .todo-deadLine-date {
+        font-size: 12px;
     }
 
     .remove-btn {
@@ -238,6 +277,10 @@ input[type="date"] {
     color: #fff;
 }
 
-.todo-checkbox:checked ~ .todo-info {
+.todo-checkbox:checked~.todo-info .todo-text {
+    text-decoration: line-through;
+}
+
+.todo-checkbox:checked~.todo-info .todo-date {
     text-decoration: line-through;
 }

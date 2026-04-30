@@ -11,11 +11,47 @@ const removeCompletedBtn = document.querySelector("[data-remove-completed]");
 const selectAllBtn = document.querySelector("[data-select-all]");
 const searchInput = document.querySelector("[data-search-input]");
 const deadLineInput = document.querySelector("[data-date-input]");
+const select = document.querySelector("[data-select]");
 
 let todoList = JSON.parse(localStorage.getItem("todos")) || [];
 let filterList = [];
 let currentFilter = "all";
 
+container.addEventListener("dblclick", (e) => {
+    if(!e.target.classList.contains("todo-text")) return;
+
+    const id = Number(e.target.closest("[data-id]").dataset.id);
+
+    const input = document.createElement("input");
+    input.value = e.target.textContent;
+
+    e.target.replaceWith(input);
+    input.focus();
+
+    input.addEventListener("blur", (e) => {
+        const todo = todoList.find(t => t.id === id);
+
+        if(todo) {
+            todo.text = input.value.trim() || todo.text;
+
+            saveToLocalStorage(todoList);
+
+            if (searchInput.value.trim()) {
+                renderAndRenderFilteredTodos(searchInput.value.trim());
+            } else {
+                render();
+            }
+
+            updateCounters();
+        }
+    })
+
+    input.addEventListener("keydown", (e) => {
+        if(e.key === "Enter") {
+            input.blur();
+        }
+    })
+})
 
 searchInput.addEventListener("input", (e) => {
     const searchValue = searchInput.value.trim();
@@ -89,6 +125,7 @@ btn.addEventListener("click", () => {
             createdAt: createdDateRepresentation(new Date()),
             completed: false,
             deadLine: deadLineInput.value,
+            difficult: select.value,
         }
 
         todoList.push(newTodo);
@@ -111,6 +148,9 @@ function createdDateRepresentation(newCreatedDate) {
 function createdTodoLoyaut(todo) {
     const todoElement = document.importNode(todoTemplate.content, true);
 
+    const todoId = todoElement.querySelector(".todo");
+    todoId.dataset.id = todo.id
+
     const checkbox = todoElement.querySelector("[data-todo-checkbox]");
     checkbox.checked = todo.completed;
 
@@ -122,6 +162,9 @@ function createdTodoLoyaut(todo) {
 
     const todoDeadLineDate = todoElement.querySelector("[data-todo-deadLine-date]");
     todoDeadLineDate.textContent = todo.deadLine;
+
+    const todoSelect = todoElement.querySelector("[data-todo-difficulties]");
+    todoSelect.textContent = todo.difficult
 
     const removeBtn = todoElement.querySelector("[data-remove-btn]");
     removeBtn.disabled = !todo.completed;
@@ -197,7 +240,7 @@ function render() {
 
     let filteredTodos = todoList;
 
-   
+
     if (currentFilter === "active") {
         filteredTodos = todoList.filter(t => !t.completed)
     }
@@ -213,10 +256,9 @@ function render() {
     const sortedTodos = [...filteredTodos].sort((a, b) => {
         const dateA = a.deadLine ? new Date(a.deadLine) : Infinity;
         const dateB = b.deadLine ? new Date(b.deadLine) : Infinity;
- 
+
         return dateA - dateB;
     })
-
 
     sortedTodos.forEach(todo => {
         const todoElement = createdTodoLoyaut(todo);
