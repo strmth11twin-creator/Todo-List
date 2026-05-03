@@ -1,11 +1,25 @@
+* {
+    transition: 0.3s;
+}
+
 :root {
-    --bg-main: #0F1221;
-    --bg-gradient-start: #0F1221;
-    --bg-gradient-end: #1A1F3A;
-    --text-main: #FFFFFF;
-    --text-secondary: #A9AFC3;
-    --text-muted: #6B708D;
-    color-scheme: light;
+    --bg: #ffffff;
+    --card-bg: #f5f5f5;
+    --text: #111111;
+    --border: #dcdcdc;
+    --input-bg: #ffffff;
+    --button-bg: #7c5cff;
+    --border-black:#333;
+    --box-shadow: #131111;
+}
+
+body.dark {
+    --bg: #060b2d;
+    --card-bg: #0b1035;
+    --text: #ffffff;
+    --border: #444;
+    --input-bg: #13183f;
+    --button-bg: #7c5cff;
 }
 
 * {
@@ -14,17 +28,16 @@
 
 body {
     margin: 0;
-    background: linear-gradient(135deg, #0F1221, #1A1F3A);
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #f1f1f1;
+    background-color: var(--bg);
     font-family: 'Inter', sans-serif;
 }
 
 .title {
-    color: var(--text-main);
+    color: var(--text);
     font-size: 25px;
 }
 
@@ -52,17 +65,28 @@ ul {
 }
 
 .container {
+    position: relative;
     margin: 100px 10px 100px 10px;
     display: flex;
     flex-direction: column;
     gap: 15px;
     align-items: start;
-    box-shadow: 2px 2px 10px var(--bg-gradient-end);
     border-radius: 5px;
-    background-color: var(--bg-gradient-start);
-    padding: 20px;
+    background-color: var(--card-bg);
+    padding: 15px;
     max-width: 700px;
     width: 100%;
+    box-shadow: 2px 2px 9px var(--box-shadow);
+}
+
+.lightAndDark {
+    position: absolute;
+    top: 13px;
+    right: 18px;
+    cursor: pointer;
+    border: none;
+    background: unset;
+    font-size: 20px;
 }
 
 .container_wrapper-content {
@@ -81,12 +105,13 @@ ul {
     width: 100%;
     cursor: pointer;
     background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    color: var(--text-muted);
+    border: 1px solid var(--border-black);
+    color: var(--text);
 }
 
 .remove-completed:hover {
-    color: var(--text-main);
+    border: 1px solid var(--border-black);
+    color: var(--button-bg);
 }
 
 .select-all {
@@ -96,12 +121,13 @@ ul {
     height: 40px;
     background: rgba(255, 255, 255, 0.03);
     cursor: pointer;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    color: var(--text-muted);
+    border: 1px solid var(--border-black);
+    color: var(--text);
 }
 
 .select-all:hover {
-    color: var(--text-main);
+    border: 1px solid var(--border-black);
+    color: var(--button-bg);
 }
 
 .container_input {
@@ -114,13 +140,17 @@ ul {
 .search-input,
 .date-input {
     background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-black);
     border-radius: 5px;
     padding: 0 10px;
     height: 50px;
     width: 100%;
     font-size: 16px;
-    color: var(--text-main);
+    color: var(--text);
+}
+
+.date-input {
+    max-width: 160px;
 }
 
 .container_deadLine-input {
@@ -138,22 +168,22 @@ ul {
 
 .deadLine_input--select {
     height: 50px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 5px;
     background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    color: #fff;
+    border: 1px solid var(--border-black);
+    color: var(--text);
     padding: 0 10px;
+
 }
 
 option {
-    color: #fff;
-    background-color: #1c1c1c;
+    color: var(--text);
+    background-color: var(--bg);
 }
 
 .input::placeholder,
 .search-input::placeholder {
-    color: var(--text-muted);
+    color: var(--text);
 }
 
 .btn {
@@ -186,11 +216,11 @@ option {
     font-weight: 600;
     cursor: pointer;
     border-radius: 5px;
-    color: var(--text-secondary);
+    color: var(--text);
 }
 
 .active {
-    color: var(--text-main);
+    color: var(--text);
     background-color: #7C5CFF;
 
 }
@@ -200,7 +230,7 @@ option {
     flex-direction: column;
     gap: 10px;
     width: 100%;
-    color: var(--text-main);
+    color: var(--text);
 }
 
 .container-buttons {
@@ -213,7 +243,7 @@ option {
 
 .todo {
     background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-black);
     border-radius: 12px;
     display: flex;
     gap: 20px;
@@ -274,7 +304,7 @@ option {
 }
 
 .label-todo {
-    color: #fff;
+    color: var(--text);
 }
 
 .todo-checkbox:checked~.todo-info .todo-text {
@@ -283,4 +313,12 @@ option {
 
 .todo-checkbox:checked~.todo-info .todo-date {
     text-decoration: line-through;
+}
+
+.input-replace {
+    color: var(--text);
+    font-size: 16px;
+    background-color: rgba(255, 255, 255, 0.03);;
+    border: 1px solid var(--border-black);
+    width: 100%;
 }

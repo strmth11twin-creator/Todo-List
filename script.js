@@ -12,10 +12,25 @@ const selectAllBtn = document.querySelector("[data-select-all]");
 const searchInput = document.querySelector("[data-search-input]");
 const deadLineInput = document.querySelector("[data-date-input]");
 const select = document.querySelector("[data-select]");
+const lightAndDarkBtn = document.querySelector("[data-lightAndDarkBtn]");
 
 let todoList = JSON.parse(localStorage.getItem("todos")) || [];
+let darkAndLight = localStorage.getItem("theme");
 let filterList = [];
 let currentFilter = "all";
+
+if(darkAndLight === "dark") {
+    document.body.classList.add("dark");
+}
+
+lightAndDarkBtn.addEventListener("click", () => {
+    document.body.classList.toggle("dark");
+
+    let isDark = document.body.classList.contains("dark");
+    lightAndDarkBtn.textContent = isDark ? "☀️" : "🌙"
+
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+})
 
 container.addEventListener("dblclick", (e) => {
     if(!e.target.classList.contains("todo-text")) return;
@@ -23,6 +38,7 @@ container.addEventListener("dblclick", (e) => {
     const id = Number(e.target.closest("[data-id]").dataset.id);
 
     const input = document.createElement("input");
+    input.classList.add("input-replace");
     input.value = e.target.textContent;
 
     e.target.replaceWith(input);
@@ -108,7 +124,7 @@ removeCompletedBtn.addEventListener("click", (e) => {
 })
 
 function saveToLocalStorage(list) {
-    localStorage.setItem("todos", JSON.stringify(list))
+    localStorage.setItem("todos", JSON.stringify(list));
 }
 
 input.addEventListener("keydown", (e) => {
@@ -211,6 +227,57 @@ function updateCounters() {
     countCompleted.textContent = completed;
 }
 
+function groupTodosById(todos) {
+    const result = {
+        overdue: [],
+        today: [],
+        tomorrow: [],
+        other: [],
+    };
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+
+    todos.forEach(todo => {
+        if(!todo.deadLine) {
+            result.other.push(todo);
+            return
+        }
+
+        const date = new Date(todo.deadLine);
+        date.setHours(0, 0, 0, 0);
+
+        if(date < today) {
+            result.overdue.push(todo);
+        } else if(date.getTime() === today.getTime()) {
+            result.today.push(todo);
+        } else if(date.getTime() === tomorrow.getTime()) {
+            result.tomorrow.push(todo);
+        } else {
+            result.other.push(todo);
+        }
+    });
+    
+    return result;
+}
+
+function renderGroup(titleText, todos) {
+    if(todos.length === 0) return;
+
+    let title = document.createElement("h3");
+    title.textContent = titleText;
+    container.append(title);
+
+    todos.forEach(todo => {
+        const todoElement = createdTodoLoyaut(todo);
+
+        container.append(todoElement);
+    })
+}
+
 function renderFiltered() {
     container.innerHTML = "";
 
@@ -240,6 +307,9 @@ function render() {
 
     let filteredTodos = todoList;
 
+    if (filteredTodos.length === 0) {
+        return container.innerHTML = "<h3>No todos...</h3>"
+    }
 
     if (currentFilter === "active") {
         filteredTodos = todoList.filter(t => !t.completed)
@@ -248,11 +318,7 @@ function render() {
     if (currentFilter === "completed") {
         filteredTodos = todoList.filter(t => t.completed)
     }
-
-    if (filteredTodos.length === 0) {
-        return container.innerHTML = "<h3>No todos...</h3>"
-    }
-
+ 
     const sortedTodos = [...filteredTodos].sort((a, b) => {
         const dateA = a.deadLine ? new Date(a.deadLine) : Infinity;
         const dateB = b.deadLine ? new Date(b.deadLine) : Infinity;
@@ -260,11 +326,12 @@ function render() {
         return dateA - dateB;
     })
 
-    sortedTodos.forEach(todo => {
-        const todoElement = createdTodoLoyaut(todo);
+    const grouped = groupTodosById(sortedTodos);
 
-        container.append(todoElement);
-    })
+    renderGroup("🔴 Просрочено", grouped.overdue);
+    renderGroup("🟡 Сегодня", grouped.today);
+    renderGroup("🟢 Завтра", grouped.tomorrow);
+    renderGroup("📅 Остальные", grouped.other);
 }
 
 render();
